@@ -1,0 +1,17 @@
+5a660080089d44c575c6e50ba9ec0642 *DESCRIPTION
+8b54e5a89fbda3af5e077053d40bec76 *NAMESPACE
+f27fa04b6b194d3dafce5eb912bce196 *R/ms_sev.R
+688cbea315337bd9d2ca6be3814a9055 *data/edss.txt.gz
+1a439746022e776332a01fdabcca805b *data/globalArmss.txt.gz
+12de493df6d7ecc99b2c03477067e78b *data/globalMsss.txt.gz
+b7448d6babcfe76857a183e45ba7cd43 *data/oldMsss.txt.gz
+eb7513ee9f9d2d2d86c5f5ba66888beb *man/edss.Rd
+61a3d19791a0bdd36a13368575019645 *man/globalArmss.Rd
+759f6b6fb6cedd8881a1277ecf2daea6 *man/globalMsss.Rd
+8a8188df04934bd4c6b71b69c6c588f9 *man/global_armss.Rd
+59dbb08001069d4c2a2877d2e1d4cfe0 *man/global_msss.Rd
+1dd429632f720ba0ec8802a23529385d *man/local_armss.Rd
+030c9a53f75c684e452b90194a640750 *man/local_msss.Rd
+c4e1ec4f904a1d65171b0985d687bdff *man/ms_sev-package.Rd
+28842f805e91c7b7e8c2f1cc54d4f494 *man/ms_sev.Rd
+9263de968378fb477b15f2856c32d714 *man/oldMsss.Rd
