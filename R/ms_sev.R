@@ -54,7 +54,7 @@ global_msss <- function(data, matrix=FALSE, omsss=FALSE){
   data$tmp[data$tmp==20] <- 19
   data$tmp[data$tmp==0] <- 2
   for(i in 1:nrow(data)){
-    if(data$ddT[i]!=0 && data$edss[i]<10){
+    if(data$ddT[i]!=0 && data$edss[i]<10 & !is.na(data$ddT[i]) & !is.na(data$edss[i])){
       data$uGMSSS[i] <- globalMsss[floor(data$ddT)[i], data$tmp[i]]
       if(omsss) {
         data$oGMSSS[i] <- oldMsss[floor(data$ddT)[i], data$tmp[i]]
@@ -83,15 +83,12 @@ global_msss <- function(data, matrix=FALSE, omsss=FALSE){
 local_msss <- function(data, range=2){
   
   data$lid <- rep(1:nrow(data))
-  
   data$lMSSS <- NA
   ## truncate the data to age 30 as max
   data$dd[data$dd>30] <- 30
-  
   ## sort the data based on diseas duration and edss in a decreasing order
   ## initial check of the data should make sure the parameter name ddl and edss is always correct
-  data.sorted <- data[order(data$dd, data$edss, decreasing=FALSE),]
-  
+  data.sorted <- data[order(data$dd, data$edss, decreasing=FALSE, na.last=NA),]
   ## we are only interested in the first 30 years. 
   for(i in 1:30){
     
@@ -105,11 +102,10 @@ local_msss <- function(data, range=2){
     
     ## create a subset of all that have had the disease for i +/- range years.
     # include the lower limit as well
-    data.range <- subset(data.sorted, (data.sorted$dd >= lower) & (data.sorted$dd <= upper))
     
+    data.range <- subset(data.sorted, (data.sorted$dd >= lower) & (data.sorted$dd <= upper))
     ## assign an averaged rank based on the edss score. 
     data.range$rank <- rank(data.range$edss, ties.method="average")
-    
     ## keep only individuals during the i:th year of disease
     year <- subset(data.range, floor(data.range$dd)==i)
     
@@ -123,8 +119,9 @@ local_msss <- function(data, range=2){
       ## paste back the msss some how... 
       ## not pretty, but will work for now
       for(i in 1:nrow(year)){
-        
-        data[data$lid[year$lid[i]],]$lMSSS <- round(year$msss[i],2)
+        #if(!is.na(data$dd[i])){ ## need to add edss??
+          data[data$lid[year$lid[i]],]$lMSSS <- round(year$msss[i],2)
+       # }
         
         
       }
@@ -143,17 +140,17 @@ local_armss <- function(data, range=2){
   
   ## sort the data based on diseas duration and edss in a decreasing order
   ## initial check of the data should make sure the parameter name ddl and edss is always correct
-  data.sorted <- data[order(data$ageatedss, data$edss, decreasing=FALSE),]
+  data.sorted <- data[order(data$ageatedss, data$edss, decreasing=FALSE, na.last=NA),]
   
-  ## we are only interested in the first 30 years. 
-  top <- ceiling(max(data$ageatedss))
+  ## getting the max age 
+  top <- ceiling(max(data$ageatedss, na.rm=T))
   for(i in 1:top){
     
     ## noone is interesting before they've had the disease for at least one year
     if(i-range <= 0) lower <- 1
     else lower <- i-range
     
-    ## and 29 is the maximum disease duration
+    ## truncating to the max age
     if(i+range > top ) upper <- top
     else upper <- i+range
     
@@ -177,8 +174,9 @@ local_armss <- function(data, range=2){
       ## not pretty, but will work for now
       for(i in 1:nrow(year)){
         
-        
-        data[data$lid[year$lid[i]],]$lARMSS <- round(year$armss[i],2)
+        if(!is.na(data$edss[i]) & !is.na(data$ageatedss[i])){
+          data[data$lid[year$lid[i]],]$lARMSS <- round(year$armss[i],2)
+        }
         
         
       }
@@ -205,7 +203,7 @@ global_armss <- function(data, matrix=FALSE){
   for(i in 1:nrow(data)){
     ## check first that the age is in the range
     
-    if(data$ageT[i] <= 58 & data$ageT[i] >= 1 & data$edss[i]<10) {
+    if(data$ageT[i] <= 58 & data$ageT[i] >= 1 & data$edss[i]<10 & !is.na(data$ageT[i]) & !is.na(data$edss[i])) {
       
       data$gARMSS[i] <- globalArmss[floor(data$ageT[i]), data$tmp[i]]
     }
