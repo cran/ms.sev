@@ -51,13 +51,14 @@ global_msss <- function(data, matrix=FALSE, omsss=FALSE){
   data$ddT[data$ddT>29]<-30
   
   data$tmp <- data$edss/0.5+1
-  data$tmp[data$tmp==20] <- 19
-  data$tmp[data$tmp==0] <- 2
+  
+  data$tmp[data$tmp==1] <- 2
   for(i in 1:nrow(data)){
+    
     if(data$ddT[i]!=0 && data$edss[i]<10 & !is.na(data$ddT[i]) & !is.na(data$edss[i])){
-      data$uGMSSS[i] <- globalMsss[floor(data$ddT)[i], data$tmp[i]]
+      data$uGMSSS[i] <- globalMsss[floor(data$ddT[i]), data$tmp[i]]
       if(omsss) {
-        data$oGMSSS[i] <- oldMsss[floor(data$ddT)[i], data$tmp[i]]
+        data$oGMSSS[i] <- oldMsss[floor(data$ddT[i]), data$tmp[i]]
       }
     }
     
