@@ -47,7 +47,7 @@ global_msss <- function(data, matrix=FALSE, omsss=FALSE){
   if(omsss) data$oGMSSS <- NA
   ## truncate the disease duration to 30 years
   
-  data$ddT <- data$dd
+  data$ddT <- data$dd+1
   data$ddT[data$ddT>29]<-30
   
   data$tmp <- data$edss/0.5+1
